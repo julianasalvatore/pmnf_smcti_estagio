@@ -1,0 +1,177 @@
+<?php
+session_start();
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrfToken = $_SESSION['csrf_token'];
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Painel de Suporte</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .expired {
+            border: 2px solid red;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #ffe6e6;
+        }
+        .expired::before {
+            content: "Expirado";
+            color: red;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .form-group, .btn {
+            margin-bottom: 15px;
+        }
+        .action-btn {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h2><span class="highlight"></span>Painel da Coordenação de Estágio</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
+                        <div class="dropdown-content">
+                            <a href="#">Cadastrar Aluno</a>
+                            <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
+                            <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
+                            <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
+                            <a href="cadastra_equipe.html">Gerenciamento de Administradores</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Relatórios</a>
+                        <div class="dropdown-content">
+                            <a href="visao_geral.html">Visão Geral</a>
+                            <a href="grafico.html">Gráficos</a>
+                        </div>
+                    </li>
+                    <li><button id="logoutBtn">Sair</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Formulário para Cadastro de Instituições -->
+        <div class="panel">
+            <h2>Cadastrar Instituição de Ensino</h2>
+            <form id="instituicaoForm">
+                <div class="form-group">
+                    <label for="instituicaoNome">Nome da Instituição:</label>
+                    <input type="text" id="instituicaoNome" name="instituicaoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataInicio">Data de Início do Vínculo:</label>
+                    <input type="date" id="dataInicio" name="dataInicio" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataFim">Data de Término do Vínculo:</label>
+                    <input type="date" id="dataFim" name="dataFim" required>
+                </div>
+                <button type="submit" class="btn">Cadastrar Instituição</button>
+            </form>
+            <div id="instituicoesLista"></div>
+        </div>
+
+        <script>
+            function atualizarSelectLocais() {
+                const locaisEstagio = JSON.parse(localStorage.getItem('locaisEstagio')) || [];
+                locaisEstagio.forEach(local => {
+                    const evento = new Event('atualizar');
+                    window.dispatchEvent(evento);
+                });
+            }
+
+            function checkAuth() {
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                if (!isLoggedIn) {
+                    //window.location.href = 'login.html';
+                }
+            }
+
+            checkAuth();
+
+            let instituicoes = JSON.parse(localStorage.getItem('instituicoes')) || [];
+
+            document.getElementById('instituicaoForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nome = document.getElementById('instituicaoNome').value;
+                const dataInicio = document.getElementById('dataInicio').value;
+                const dataFim = document.getElementById('dataFim').value;
+
+                const novaInstituicao = { id: Date.now(), nome, dataInicio, dataFim };
+                instituicoes.push(novaInstituicao);
+                localStorage.setItem('instituicoes', JSON.stringify(instituicoes));
+
+                alert('Instituição cadastrada com sucesso!');
+                this.reset();
+                atualizarListaInstituicoes();
+            });
+
+            function atualizarListaInstituicoes() {
+                const lista = document.getElementById('instituicoesLista');
+                lista.innerHTML = '<h3>Instituições Cadastradas</h3>';
+
+                instituicoes.forEach(instituicao => {
+                    const dataAtual = new Date();
+                    const dataFim = new Date(instituicao.dataFim);
+                    const expirado = dataFim < dataAtual;
+
+                    const instituicaoHtml = `
+                        <p class="${expirado ? 'expired' : ''}">
+                            Nome: ${instituicao.nome} | Início: ${instituicao.dataInicio} | Fim: ${instituicao.dataFim}
+                            <button class="action-btn edit-btn" onclick="editarInstituicao(${instituicao.id})">Editar</button>
+                            <button class="action-btn delete-btn" onclick="deletarInstituicao(${instituicao.id})">Excluir</button>
+                        </p>
+                    `;
+                    lista.innerHTML += instituicaoHtml;
+                });
+            }
+
+            function editarInstituicao(id) {
+                const instituicao = instituicoes.find(inst => inst.id === id);
+                document.getElementById('instituicaoNome').value = instituicao.nome;
+                document.getElementById('dataInicio').value = instituicao.dataInicio;
+                document.getElementById('dataFim').value = instituicao.dataFim;
+            }
+
+            function deletarInstituicao(id) {
+                instituicoes = instituicoes.filter(inst => inst.id !== id);
+                localStorage.setItem('instituicoes', JSON.stringify(instituicoes));
+                atualizarListaInstituicoes();
+            }
+
+            function atualizarSelectInstituicoes() {
+                const instituicaoSelect = document.getElementById('instituicaoSelect');
+                const instituicoesAtivas = instituicoes.filter(inst => new Date(inst.dataFim) >= new Date());
+
+                instituicaoSelect.innerHTML = '<option value="" disabled selected>Selecione a instituição</option>';
+                instituicoesAtivas.forEach(inst => {
+                    const option = document.createElement('option');
+                    option.value = inst.id;
+                    option.textContent = inst.nome;
+                    instituicaoSelect.appendChild(option);
+                });
+            }
+
+            atualizarListaInstituicoes();
+            atualizarSelectInstituicoes();
+        </script>
+    </div>
+</body>
+</html>

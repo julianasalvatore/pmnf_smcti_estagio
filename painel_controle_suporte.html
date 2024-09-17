@@ -1,0 +1,147 @@
+<html><head>
+<title>Painel de Controle - Suporte</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+  }
+  header {
+    background: #35424a;
+    color: #ffffff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #e8491d 3px solid;
+  }
+  header a {
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+  }
+  header ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow: hidden;
+  }
+  header li {
+    float: left;
+    display: inline;
+    padding: 0 20px 0 20px;
+  }
+  header #branding {
+    float: left;
+  }
+  header #branding h1 {
+    margin: 0;
+  }
+  header nav {
+    float: right;
+    margin-top: 10px;
+  }
+  header .highlight, header .current a {
+    color: #e8491d;
+    font-weight: bold;
+  }
+  header a:hover {
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+  }
+  .dashboard-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .dashboard-item h3 {
+    margin-top: 0;
+  }
+  .dashboard-item a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #e8491d;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  .dashboard-item a:hover {
+    background: #333;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div id="branding">
+        <h1><span class="highlight">Painel</span> de Controle</h1>
+      </div>
+      <nav>
+        <ul>
+          <li class="current"><a href="dashboard.html">Início</a></li>
+          <li><a href="administradores.html">Administradores</a></li>
+          <li><a href="instituicoes.html">Instituições</a></li>
+          <li><a href="locais_estagio.html">Locais de Estágio</a></li>
+          <li><a href="logout.html">Sair</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Bem-vindo ao Painel de Controle de Suporte</h2>
+    <div class="dashboard-grid">
+      <div class="dashboard-item">
+        <h3>Gerenciar Administradores</h3>
+        <p>Adicione, edite ou remova administradores do sistema.</p>
+        <a href="administradores.html">Acessar</a>
+      </div>
+      <div class="dashboard-item">
+        <h3>Gerenciar Instituições</h3>
+        <p>Cadastre e gerencie instituições de ensino.</p>
+        <a href="instituicoes.html">Acessar</a>
+      </div>
+      <div class="dashboard-item">
+        <h3>Gerenciar Locais de Estágio</h3>
+        <p>Adicione e gerencie locais disponíveis para estágio.</p>
+        <a href="locais_estagio.html">Acessar</a>
+      </div>
+      <div class="dashboard-item">
+        <h3>Relatórios</h3>
+        <p>Visualize relatórios e estatísticas do sistema.</p>
+        <a href="relatorios.html">Acessar</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Verificar se o usuário está logado e tem permissões de administrador
+    document.addEventListener('DOMContentLoaded', function() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      const userRole = localStorage.getItem('userRole');
+      
+      if (!isLoggedIn || userRole !== 'admin') {
+       // window.location.href = '../../login.html';
+      }
+    });
+  </script>
+</body>
+</html>

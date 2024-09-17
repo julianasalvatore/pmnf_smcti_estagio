@@ -1,0 +1,265 @@
+<html><head><base href="index.html#relatorios">
+<title>Coordenação de Estágio - Relatórios</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  nav ul li {
+    display: inline;
+    margin-right: 10px;
+  }
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  h1, h2 {
+    color: #333;
+  }
+  .dashboard-item {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .btn {
+    display: inline-block;
+    background-color: #1d57e8;
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  .btn:hover {
+    background-color: #333;
+  }
+  #logoutBtn {
+    background-color: #3685f4;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #1d83e8;
+    color: white;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  .chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  .filter-container {
+    margin-bottom: 20px;
+  }
+  .filter-container label {
+    margin-right: 10px;
+  }
+  .filter-container select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Coordenação de Estágio - Relatórios</h1>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="dashboard.html#estagiarios">Estagiários</a></li>
+        <li><a href="dashboard.html#documentos">Documentos</a></li>
+        <li><a href="dashboard.html#fila-espera">Fila de Espera</a></li>
+        <li><a href="#relatorios">Relatórios</a></li>
+        <li><button id="logoutBtn">Sair</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Relatórios</h2>
+
+    <div class="dashboard-item">
+      <h3>Resumo Geral</h3>
+      <p>Total de Estagiários Ativos: <span id="totalActiveInterns">0</span></p>
+      <p>Total de Estágios Concluídos: <span id="totalCompletedInternships">0</span></p>
+      <p>Média de Duração dos Estágios: <span id="averageInternshipDuration">0</span> meses</p>
+    </div>
+
+    <div class="dashboard-item">
+      <h3>Gráfico de Estágios por Curso</h3>
+      <div class="chart-container">
+        <canvas id="internshipsByCourseChart"></canvas>
+      </div>
+    </div>
+
+    <div class="dashboard-item">
+      <h3>Relatório Detalhado</h3>
+      <div class="filter-container">
+        <label for="periodFilter">Período:</label>
+        <select id="periodFilter">
+          <option value="mensal">Mensal</option>
+          <option value="trimestral">Trimestral</option>
+          <option value="anual">Anual</option>
+        </select>
+        <label for="courseFilter">Curso:</label>
+        <select id="courseFilter">
+          <option value="todos">Todos</option>
+          <option value="engenharia">Engenharia</option>
+          <option value="administracao">Administração</option>
+          <option value="ti">Tecnologia da Informação</option>
+        </select>
+        <button class="btn" onclick="gerarRelatorioDetalhado()">Gerar Relatório</button>
+      </div>
+      <table id="detailedReportTable">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Curso</th>
+            <th>Empresa</th>
+            <th>Data de Início</th>
+            <th>Data de Término</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="detailedReportBody">
+          <!-- Dados serão inseridos dinamicamente aqui -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Simulação de dados
+    const mockData = {
+      activeInterns: 150,
+      completedInternships: 300,
+      averageDuration: 6,
+      internshipsByCourse: {
+        'Engenharia': 80,
+        'Administração': 60,
+        'Tecnologia da Informação': 70,
+        'Outros': 40
+      },
+      detailedReport: [
+        { name: 'João Silva', course: 'Engenharia', company: 'TechCorp', startDate: '2023-01-15', endDate: '2023-07-15', status: 'Ativo' },
+        { name: 'Maria Santos', course: 'Administração', company: 'AdminPro', startDate: '2023-02-01', endDate: '2023-08-01', status: 'Ativo' },
+        { name: 'Carlos Ferreira', course: 'Tecnologia da Informação', company: 'DataSys', startDate: '2023-03-10', endDate: '2023-09-10', status: 'Ativo' },
+        { name: 'Ana Rodrigues', course: 'Engenharia', company: 'EngiSolutions', startDate: '2022-09-01', endDate: '2023-03-01', status: 'Concluído' }
+      ]
+    };
+
+    function loadDashboardData() {
+      document.getElementById('totalActiveInterns').textContent = mockData.activeInterns;
+      document.getElementById('totalCompletedInternships').textContent = mockData.completedInternships;
+      document.getElementById('averageInternshipDuration').textContent = mockData.averageDuration;
+    }
+
+    function createInternshipsByCourseChart() {
+      const ctx = document.getElementById('internshipsByCourseChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(mockData.internshipsByCourse),
+          datasets: [{
+            data: Object.values(mockData.internshipsByCourse),
+            backgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#4BC0C0'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'Distribuição de Estágios por Curso'
+          }
+        }
+      });
+    }
+
+    function gerarRelatorioDetalhado() {
+      const periodo = document.getElementById('periodFilter').value;
+      const curso = document.getElementById('courseFilter').value;
+      
+      // Aqui você pode implementar a lógica para filtrar os dados com base no período e curso selecionados
+      // Por enquanto, vamos apenas exibir os dados simulados
+      
+      const tableBody = document.getElementById('detailedReportBody');
+      tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar novos dados
+
+      mockData.detailedReport.forEach(intern => {
+        const row = tableBody.insertRow();
+        row.insertCell(0).textContent = intern.name;
+        row.insertCell(1).textContent = intern.course;
+        row.insertCell(2).textContent = intern.company;
+        row.insertCell(3).textContent = intern.startDate;
+        row.insertCell(4).textContent = intern.endDate;
+        row.insertCell(5).textContent = intern.status;
+      });
+
+      alert(`Relatório gerado para o período ${periodo} e curso ${curso}`);
+    }
+
+    function logout() {
+      // Implementar lógica de logout aqui
+      alert('Logout realizado com sucesso!');
+      window.location.href = 'index.html'; // Redireciona para a página de login
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    window.onload = function() {
+      loadDashboardData();
+      createInternshipsByCourseChart();
+    };
+  </script>
+</body>
+</html>

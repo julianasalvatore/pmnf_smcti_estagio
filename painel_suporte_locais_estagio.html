@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Painel de Locais de Estágio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <!-- Mesmo cabeçalho com navegação -->
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <h2>Cadastrar Local de Estágio</h2>
+            <form id="localEstagioForm">
+                <div class="form-group">
+                    <label for="localNome">Nome do Local:</label>
+                    <input type="text" id="localNome" name="localNome" required>
+                </div>
+                <button type="submit" class="btn">Cadastrar Local de Estágio</button>
+            </form>
+            <div id="locaisEstagioLista"></div>
+        </div>
+    </div>
+
+    <script src="locais_estagio.js"></script>
+</body>
+</html>

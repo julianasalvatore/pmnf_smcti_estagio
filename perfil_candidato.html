@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil do Aluno - Sistema de Estágio</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Geral */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4; /* Cor de fundo da página */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        header {
+            background: #09455b; /* Cor azul para a navbar */
+            color: #ffffff;
+            padding: 20px 0;
+            border-bottom: #0056b3 3px solid; /* Tom mais escuro de azul para a borda inferior */
+        }
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+        header li {
+            display: inline;
+            padding: 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h3 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #007bff; /* Cor azul para o dropdown */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: #ffffff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #0056b3; /* Tom mais escuro de azul para o hover do dropdown */
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: #0056b3; /* Tom mais escuro de azul para o botão dropdown ao passar o mouse */
+        }
+
+        /* Conteúdo Principal */
+        .main-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white; /* Cor de fundo do conteúdo */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .status-container, .queue-info, .documents, .update-form-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .status-container {
+            background-color: #e8f5e9;
+        }
+        .queue-info {
+            background-color: #e3f2fd;
+        }
+        .documents {
+            background-color: #f9f9f9;
+        }
+        .status-bar {
+            background-color: #ddd;
+            height: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .status-progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        .document-item {
+            background-color: #ffffff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .document-item button {
+            background-color: #17738f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .document-item button:hover {
+            background-color: #333;
+        }
+        /* Formulário de atualização */
+        .update-form-container {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group button {
+            display: inline-block;
+            background: #125d6a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background: #35424a;
+        }
+        .edit-button {
+            background: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .edit-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div id="branding">
+            <h3><span class="highlight"></span>Painel da Coordenação de Estágio</h3>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><button id="logoutBtn">Sair</button></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="main-container">
+    <h1>Perfil do Aluno</h1>
+    <div id="profileInfo">
+        <p><strong>Nome:</strong> <span id="studentName"></span></p>
+        <p><strong>Curso:</strong> <span id="studentCourse"></span></p>
+        <p><strong>Instituição:</strong> <span id="studentInstitution"></span></p>
+        <p><strong>E-mail:</strong> <span id="studentEmail"></span></p>
+        <p><strong>Período/Ano:</strong> <span id="studentPeriod"></span></p>
+    </div>
+
+    <div class="status-container">
+        <h2>Status da Solicitação de Estágio</h2>
+        <div id="statusDescription"></div>
+        <div class="status-bar">
+            <div id="statusProgress" class="status-progress"></div>
+        </div>
+    </div>
+
+    <div class="queue-info">
+        <h2>Posição na Fila de Espera</h2>
+        <p>Sua posição atual: <strong id="queuePosition"></strong></p>
+    </div>
+
+    <div class="documents">
+        <h2>Documentos</h2>
+        <div id="documentList"></div>
+    </div>
+
+    <button class="edit-button" onclick="toggleUpdateForm()">Editar Informações</button>
+
+    <div class="update-form-container" id="updateFormContainer">
+        <h2>Atualizar Dados Cadastrais</h2>
+        <form id="updateForm" action="atualizar_dados.php" method="POST">
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="periodo">Período/Ano:</label>
+                <input type="text" id="periodo" name="periodo" required>
+            </div>
+            <div class="form-group">
+                <label for="instituicao">Instituição:</label>
+                <select id="instituicao" name="instituicao" required>
+                    <!-- Opções serão preenchidas pelo script -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="senhaAtual">Senha Atual:</label>
+                <input type="password" id="senhaAtual" name="senhaAtual" required>
+            </div>
+            <div class="form-group">
+                <label for="novaSenha">Nova Senha:</label>
+                <input type="password" id="novaSenha" name="novaSenha" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmarNovaSenha">Confirmar Nova Senha:</label>
+                <input type="password" id="confirmarNovaSenha" name="confirmarNovaSenha" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Simulação de dados do aluno (substitua por dados reais do backend)
+    const studentData = {
+        name: "João da Silva",
+        course: "Engenharia de Software",
+        institution: "Universidade XYZ",
+        email: "joao.silva@xyz.edu",
+        period: "4º Ano",
+        status: "Em análise",
+        statusPercentage: 40,
+        queuePosition: 3,
+        documents: [
+            { name: "Termo de Compromisso", status: "Pendente" },
+            { name: "Plano de Atividades", status: "Aprovado" },
+            { name: "Relatório Final", status: "Não iniciado" }
+        ],
+        institutions: [
+            "Universidade XYZ",
+            "Faculdade ABC",
+            "Instituto DEF"
+        ]
+    };
+
+    // Preencher informações do perfil
+    document.getElementById('studentName').textContent = studentData.name;
+    document.getElementById('studentCourse').textContent = studentData.course;
+    document.getElementById('studentInstitution').textContent = studentData.institution;
+    document.getElementById('studentEmail').textContent = studentData.email;
+    document.getElementById('studentPeriod').textContent = studentData.period;
+
+    // Atualizar status
+    document.getElementById('statusDescription').textContent = `Status atual: ${studentData.status}`;
+    document.getElementById('statusProgress').style.width = `${studentData.statusPercentage}%`;
+
+    // Atualizar informações da fila
+    document.getElementById('queuePosition').textContent = studentData.queuePosition;
+
+    // Preencher lista de documentos
+    const documentList = document.getElementById('documentList');
+    studentData.documents.forEach(doc => {
+        const docElement = document.createElement('div');
+        docElement.className = 'document-item';
+        docElement.innerHTML = `
+            <span>${doc.name} - <em>${doc.status}</em></span>
+            <button onclick="viewDocument('${doc.name}')">Visualizar</button>
+        `;
+        documentList.appendChild(docElement);
+    });
+
+    // Função para visualizar documento (simulada)
+    function viewDocument(docName) {
+        alert(`Visualizando documento: ${docName}`);
+        // Aqui você implementaria a lógica real para abrir ou baixar o documento
+    }
+
+    // Função para preencher o formulário com dados atuais
+    function populateUpdateForm() {
+        document.getElementById('email').value = studentData.email;
+        document.getElementById('periodo').value = studentData.period;
+        document.getElementById('instituicao').innerHTML = studentData.institutions.map(institution =>
+            `<option value="${institution}" ${institution === studentData.institution ? 'selected' : ''}>${institution}</option>`
+        ).join('');
+    }
+
+    // Alternar exibição do formulário de atualização
+    function toggleUpdateForm() {
+        const updateFormContainer = document.getElementById('updateFormContainer');
+        updateFormContainer.style.display = updateFormContainer.style.display === 'none' || updateFormContainer.style.display === '' ? 'block' : 'none';
+    }
+
+    // Chama a função para preencher o formulário quando a página carrega
+    window.onload = populateUpdateForm;
+</script>
+</body>
+</html>

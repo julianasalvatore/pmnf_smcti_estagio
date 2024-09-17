@@ -1,0 +1,309 @@
+<?php
+session_start();
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+$csrfToken = $_SESSION['csrf_token'];
+?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Sistema de Recebimento de Estagiários</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #35b0e0 3px solid;
+        }
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            display: inline;
+            padding: 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h3 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .highlight, header .current a {
+            color: #35b0e0;
+            font-weight: bold;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            display: inline-block;
+            background: #125d6a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #35424a;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div id="branding">
+            <h3><span class="highlight"></span>Painel da Coordenação de Estágio</h3>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
+                    <div class="dropdown-content">
+                        <a href="">Cadastrar Aluno</a>
+                        <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
+                        <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
+                        <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
+                        <a href="cadastra_equipe.html">Gerenciamento de Administradores</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Relatórios</a>
+                    <div class="dropdown-content">
+                        <a href="visao_geral.html">Visão Geral</a>
+                        <a href="grafico.html">Gráficos</a>
+                    </div>
+                </li>
+                <li><button id="logoutBtn">Sair</button></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <h1>Cadastro de novo estagiário</h1>
+    <h2><i style="color: red;">As vagas ofertadas não são remuneradas.</i></h2>
+
+    <div class="form-container">
+        <form id="cadastroForm" action="processar_cadastro.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken); ?>">
+
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento:</label>
+                <input type="date" id="dataNascimento" name="dataNascimento" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+
+            <div class="form-group">
+                <label for="instituicao">Instituição:
+                    <i>Se a sua instituição de ensino não estiver listada abaixo, isso significa que ela não possui ou o convênio conosco expirou.</i>
+                </label>
+                <select id="instituicao" name="instituicao" required>
+                    <option value="" disabled selected>Selecione a instituição</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="curso">Curso:</label>
+                <select id="curso" name="curso" required>
+                    <option value="" disabled selected>Selecione o curso</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nivelFormacao">Nível de Formação:</label>
+                <select id="nivelFormacao" name="nivelFormacao" required onchange="atualizarPeriodos()">
+                    <option value="" disabled selected>Selecione o nível de formação</option>
+                    <option value="medio_tecnico">Nível Médio Técnico</option>
+                    <option value="superior">Nível Superior</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="periodo">Período:</label>
+                <select id="periodo" name="periodo" required>
+                    <option value="" disabled selected>Selecione o período</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Locais de Preferência para Estágio:
+                <br><i>*Você será alocado no setor que estiver precisando de estagiários, mas havendo a possibilidade, te alocaremos em um dos 3 locais sugeridos</i></label>
+                <select id="local1" name="local1" required>
+                    <option value="" disabled selected>Selecione o 1º local</option>
+                </select>
+                <select id="local2" name="local2">
+                    <option value="">Selecione o 2º local (opcional)</option>
+                </select>
+                <select id="local3" name="local3">
+                    <option value="">Selecione o 3º local (opcional)</option>
+                </select>
+            </div>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Função para atualizar as opções de seleção com dados do localStorage
+    function atualizarSelects() {
+        const instituicoes = JSON.parse(localStorage.getItem('instituicoes')) || [];
+        const locaisEstagio = JSON.parse(localStorage.getItem('locaisEstagio')) || [];
+        const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
+
+        // Atualiza o select de instituições
+        const instituicaoSelect = document.getElementById('instituicao');
+        instituicaoSelect.innerHTML = '<option value="" disabled selected>Selecione a instituição</option>';
+        instituicoes.forEach(inst => {
+            const optionElement = document.createElement('option');
+            optionElement.textContent = inst.nome;
+            optionElement.value = inst.id;
+            instituicaoSelect.appendChild(optionElement);
+        });
+
+        // Atualiza o select de cursos
+        const cursoSelect = document.getElementById('curso');
+        cursoSelect.innerHTML = '<option value="" disabled selected>Selecione o curso</option>';
+        cursos.forEach(curso => {
+            const optionElement = document.createElement('option');
+            optionElement.textContent = curso.nome;
+            optionElement.value = curso.id;
+            cursoSelect.appendChild(optionElement);
+        });
+
+        // Atualiza os selects de locais de estágio
+        const localSelects = ['local1', 'local2', 'local3'];
+        localSelects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = `<option value="" ${selectId === 'local1' ? 'disabled selected' : ''}>Selecione o ${localSelects.indexOf(selectId) + 1}º local${selectId === 'local2' ? ' (opcional)' : ''}</option>`;
+            locaisEstagio.forEach(local => {
+                const optionElement = document.createElement('option');
+                optionElement.textContent = local.nome;
+                optionElement.value = local.id;
+                select.appendChild(optionElement);
+            });
+        });
+
+        // Adiciona a verificação de duplicatas no evento de mudança dos selects
+        localSelects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            select.addEventListener('change', function() {
+                verificarDuplicatas(localSelects);
+            });
+        });
+    }
+
+    // Função para verificar duplicatas
+    function verificarDuplicatas(selectIds) {
+        const selectedValues = selectIds.map(id => document.getElementById(id).value);
+        const duplicates = selectedValues.filter((value, index, self) => self.indexOf(value) !== index && value !== '');
+
+        if (duplicates.length > 0) {
+            alert('Você não pode selecionar o mesmo local mais de uma vez.');
+            // Remove o valor duplicado
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
+                if (duplicates.includes(select.value)) {
+                    select.value = '';
+                }
+            });
+        }
+    }
+
+    // Função para atualizar os períodos com base no nível de formação selecionado
+    function atualizarPeriodos() {
+        const nivelFormacao = document.getElementById('nivelFormacao').value;
+        const periodoSelect = document.getElementById('periodo');
+
+        // Limpa as opções existentes
+        periodoSelect.innerHTML = '<option value="" disabled selected>Selecione o período</option>';
+
+        if (nivelFormacao === 'medio_tecnico') {
+            for (let ano = 1; ano <= 6; ano++) {
+                const option = document.createElement('option');
+                option.value = `ano_${ano}`;
+                option.textContent = `${ano}° ano`;
+                periodoSelect.appendChild(option);
+            }
+        } else if (nivelFormacao === 'superior') {
+            for (let periodo = 1; periodo <= 12; periodo++) {
+                const option = document.createElement('option');
+                option.value = `periodo_${periodo}`;
+                option.textContent = `${periodo}° período`;
+                periodoSelect.appendChild(option);
+            }
+        }
+    }
+
+    // Atualiza os selects ao carregar a página
+    document.addEventListener('DOMContentLoaded', atualizarSelects);
+</script>
+</body>
+</html>

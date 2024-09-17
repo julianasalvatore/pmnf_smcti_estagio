@@ -1,0 +1,643 @@
+<html><head><!--base href="index.html/dashboard.html"--->
+<title>Coordenação de Estágio - Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  nav ul li {
+    display: inline;
+    margin-right: 10px;
+  }
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  h1, h2 {
+    color: #333;
+  }
+  .dashboard-item {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .btn {
+    display: inline-block;
+    background-color: #1d9ee8;
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  .btn:hover {
+    background-color: #333;
+  }
+  #logoutBtn {
+    background-color: #36aef4;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #1d8de8;
+    color: white;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+  }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+
+
+  <html>
+    <head>
+    <title>Coordenação de Estágio - Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+    
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+    
+      header {
+        background-color: #35424a;
+        color: #fff;
+        padding: 1rem;
+      }
+    
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+    
+      nav ul li {
+        margin-right: 15px;
+      }
+    
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px;
+        display: block;
+        transition: background-color 0.3s ease;
+      }
+    
+      nav ul li a:hover {
+        background-color: #555;
+        border-radius: 5px;
+      }
+    
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+    
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #333;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+    
+      .dropdown-content a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.3s;
+      }
+    
+      .dropdown-content a:hover {
+        background-color: #575757;
+      }
+    
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+    
+      .dropdown:hover .dropbtn {
+        background-color: #555;
+      }
+    
+      h1, h2 {
+        color: #333;
+      }
+    
+      .dashboard-item {
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+    
+      .btn {
+        display: inline-block;
+        background-color: #1d9ee8;
+        color: #fff;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+    
+      .btn:hover {
+        background-color: #333;
+      }
+    
+      #logoutBtn {
+        background-color: #36aef4;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    
+      /* Responsividade para telas menores */
+      @media screen and (max-width: 768px) {
+        nav ul {
+          flex-direction: column;
+          align-items: center;
+        }
+    
+        nav ul li {
+          margin-bottom: 10px;
+        }
+    
+        .dropdown-content {
+          position: relative;
+        }
+      }
+
+    
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+    .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+    
+    </style>
+    </head>
+    <body>
+    
+  
+  <header>
+      <div class="container">
+          <div id="branding">
+              <h3><span class="highlight"></span>Painel da Coordenação de Estágio</h2>
+          </div>
+          <nav>
+              <ul>
+                  <li><a href="index.html">Inicio</a></li>
+                  <!--li class="current"><a href="#">Cadastro de Instituições de Ensino</a></li-->
+                  <li class="dropdown">
+                      <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
+                      <div class="dropdown-content">
+                          <a href="#">Cadastrar Aluno</a>
+                          <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
+                          <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
+                          <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
+                          <a href="cadastra_equipe.html">Gerenciamento de Administradores</a>
+                      </div>
+                  </li>
+                  <li class="dropdown">
+                      <a href="javascript:void(0)" class="dropbtn">Relatórios</a>
+                      <div class="dropdown-content">
+                          <a href="visao_geral.html">Visão Geral</a>
+                          <!--a href="#">Relatório 2</a-->
+                          <a href="grafico.html">Gráficos</a>
+                      </div>
+                  </li>
+                  <li><button id="logoutBtn">Sair</button></li>
+              </ul>
+          </nav>
+      </div>
+  </header>
+
+  <!--header>
+    <h1>Visão Geral</h1>
+    <nav>
+      <ul>
+        <li><a href="painel_suporte.html">Inicio</a></li>
+        <!--li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#estagiarios">Estagiários</a></li>
+        <li><a href="#documentos">Documentos</a></li>
+        <li><a href="#fila-espera">Fila de Espera</a></li>
+        <li><a href="#inscritos">Lista de Inscritos</a></li>
+        <li><a href="index.html#relatorios">Relatórios</a></li->
+        <li><button id="logoutBtn">Sair</button></li>
+      </ul>
+    </nav>
+  </header-->
+
+
+
+
+
+  <div class="container">
+    <div class="dashboard-grid">
+      <div class="dashboard-item">
+        <section id="dashboard" class="dashboard-item">
+          <h2>Visão Geral</h2>
+          <p>Total de Estagiários: <span id="totalInterns">0</span></p>
+          <p>Vagas Disponíveis: <span id="availablePositions">0</span></p>
+          <p>Documentos Pendentes: <span id="pendingDocuments">0</span></p>
+        </section>
+      </div>
+      <div class="dashboard-item">
+        <h3>Ações Rápidas</h3>
+        <ul>
+          <li><a href="#">Cadastrar Novo Estagiário</a></li>
+          <li><a href="#">Aprovar Documentos</a></li>
+          <li><a href="#">Gerar Relatório Mensal</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="container">
+    <!--section id="dashboard" class="dashboard-item">
+      <h2>Visão Geral</h2>
+      <p>Total de Estagiários: <span id="totalInterns">0</span></p>
+      <p>Vagas Disponíveis: <span id="availablePositions">0</span></p>
+      <p>Documentos Pendentes: <span id="pendingDocuments">0</span></p>
+    </section-->
+
+    <section id="estagiarios" class="dashboard-item">
+      <h2>Estagiários Atuais</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Curso</th>
+            <th>Empresa</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="internsTableBody">
+          <!-- Dados serão inseridos dinamicamente aqui -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="documentos" class="dashboard-item">
+      <h2>Gerenciar Documentos</h2>
+      <button class="btn" onclick="openUploadModal()">Carregar Novo Documento</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Documento</th>
+            <th>Aluno</th>
+            <th>Data de Upload</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="documentsTableBody">
+          <!-- Dados serão inseridos dinamicamente aqui -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="fila-espera" class="dashboard-item">
+      <h2>Fila de Espera</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Curso</th>
+            <th>Data de Inscrição</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="waitingListTableBody">
+          <!-- Dados serão inseridos dinamicamente aqui -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="inscritos" class="dashboard-item">
+      <h2>Lista de Inscritos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Curso</th>
+            <th>Data de Inscrição</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="registeredListTableBody">
+          <!-- Dados serão inseridos dinamicamente aqui -->
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Modal para Upload de Documento -->
+  <div id="uploadModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Carregar Novo Documento</h2>
+      <form id="uploadForm">
+        <label for="documentType">Tipo de Documento:</label>
+        <select id="documentType" required>
+          <option value="">Selecione o tipo</option>
+          <option value="solicitation">Formulário de Solicitação de Estágio</option>
+          <option value="tce">Termo de Compromisso de Estágio (TCE)</option>
+        </select>
+        <br><br>
+        <label for="studentName">Nome do Aluno:</label>
+        <input type="text" id="studentName" required>
+        <br><br>
+        <label for="documentFile">Arquivo (PDF):</label>
+        <input type="file" id="documentFile" accept=".pdf" required>
+        <br><br>
+        <button type="submit" class="btn">Enviar Documento</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Simulação de dados
+    const mockData = {
+      totalInterns: 50,
+      availablePositions: 10,
+      pendingDocuments: 5,
+      interns: [
+        { name: "João Silva", course: "Engenharia", company: "Tech Co.", status: "Ativo" },
+        { name: "Maria Santos", course: "Administração", company: "Admin Inc.", status: "Pendente" },
+        { name: "Pedro Oliveira", course: "TI", company: "IT Solutions", status: "Ativo" }
+      ],
+      documents: [
+        { type: "Formulário de Solicitação", student: "João Silva", uploadDate: "2023-05-01", status: "Aprovado" },
+        { type: "TCE", student: "Maria Santos", uploadDate: "2023-05-02", status: "Pendente" }
+      ],
+      waitingList: [
+        { name: "Ana Rodrigues", course: "Engenharia", registrationDate: "2023-04-15", status: "Em espera" },
+        { name: "Carlos Ferreira", course: "TI", registrationDate: "2023-04-20", status: "Em espera" }
+      ],
+      registeredList: [
+        { name: "Luísa Mendes", course: "Administração", registrationDate: "2023-05-01", status: "Inscrito" },
+        { name: "Rafael Sousa", course: "Engenharia", registrationDate: "2023-05-02", status: "Inscrito" }
+      ]
+    };
+
+    function loadDashboardData() {
+      document.getElementById('totalInterns').textContent = mockData.totalInterns;
+      document.getElementById('availablePositions').textContent = mockData.availablePositions;
+      document.getElementById('pendingDocuments').textContent = mockData.pendingDocuments;
+
+      const internsTableBody = document.getElementById('internsTableBody');
+      internsTableBody.innerHTML = '';
+      mockData.interns.forEach(intern => {
+        const row = internsTableBody.insertRow();
+        row.insertCell(0).textContent = intern.name;
+        row.insertCell(1).textContent = intern.course;
+        row.insertCell(2).textContent = intern.company;
+        row.insertCell(3).textContent = intern.status;
+        const actionsCell = row.insertCell(4);
+        actionsCell.innerHTML = `
+          <button class="btn" onclick="editIntern('${intern.name}')">Editar</button>
+          <button class="btn" onclick="removeIntern('${intern.name}')">Remover</button>
+        `;
+      });
+
+      const documentsTableBody = document.getElementById('documentsTableBody');
+      documentsTableBody.innerHTML = '';
+      mockData.documents.forEach(doc => {
+        const row = documentsTableBody.insertRow();
+        row.insertCell(0).textContent = doc.type;
+        row.insertCell(1).textContent = doc.student;
+        row.insertCell(2).textContent = doc.uploadDate;
+        row.insertCell(3).textContent = doc.status;
+        const actionsCell = row.insertCell(4);
+        actionsCell.innerHTML = `
+          <button class="btn" onclick="viewDocument('${doc.type}', '${doc.student}')">Visualizar</button>
+          <button class="btn" onclick="approveDocument('${doc.type}', '${doc.student}')">Aprovar</button>
+        `;
+      });
+
+      const waitingListTableBody = document.getElementById('waitingListTableBody');
+      waitingListTableBody.innerHTML = '';
+      mockData.waitingList.forEach(student => {
+        const row = waitingListTableBody.insertRow();
+        row.insertCell(0).textContent = student.name;
+        row.insertCell(1).textContent = student.course;
+        row.insertCell(2).textContent = student.registrationDate;
+        row.insertCell(3).textContent = student.status;
+        const actionsCell = row.insertCell(4);
+        actionsCell.innerHTML = `
+          <button class="btn" onclick="changeStatus('${student.name}')">Alterar Status</button>
+        `;
+      });
+
+      const registeredListTableBody = document.getElementById('registeredListTableBody');
+      registeredListTableBody.innerHTML = '';
+      mockData.registeredList.forEach(student => {
+        const row = registeredListTableBody.insertRow();
+        row.insertCell(0).textContent = student.name;
+        row.insertCell(1).textContent = student.course;
+        row.insertCell(2).textContent = student.registrationDate;
+        row.insertCell(3).textContent = student.status;
+        const actionsCell = row.insertCell(4);
+        actionsCell.innerHTML = `
+          <button class="btn" onclick="assignToGroup('${student.name}')">Atribuir Grupo</button>
+        `;
+      });
+    }
+
+    function editIntern(name) {
+      alert(`Editando informações de ${name}`);
+      // Implementar lógica de edição
+    }
+
+    function removeIntern(name) {
+      if (confirm(`Tem certeza que deseja remover ${name} da lista de estagiários?`)) {
+        alert(`${name} removido da lista de estagiários`);
+        // Implementar lógica de remoção
+      }
+    }
+
+    function viewDocument(type, student) {
+      alert(`Visualizando ${type} de ${student}`);
+      // Implementar lógica de visualização
+    }
+
+    function approveDocument(type, student) {
+      alert(`Documento ${type} de ${student} aprovado`);
+      // Implementar lógica de aprovação
+    }
+
+    function changeStatus(name) {
+      const newStatus = prompt(`Digite o novo status para ${name}:`);
+      if (newStatus) {
+        alert(`Status de ${name} alterado para: ${newStatus}`);
+        // Implementar lógica de alteração de status
+      }
+    }
+
+    function assignToGroup(name) {
+      const group = prompt(`Digite o grupo para atribuir ${name}:`);
+      if (group) {
+        alert(`${name} atribuído ao grupo: ${group}`);
+        // Implementar lógica de atribuição de grupo
+      }
+    }
+
+    function openUploadModal() {
+      document.getElementById('uploadModal').style.display = 'block';
+    }
+
+    function closeUploadModal() {
+      document.getElementById('uploadModal').style.display = 'none';
+    }
+
+    document.querySelector('.close').onclick = closeUploadModal;
+
+    window.onclick = function(event) {
+      if (event.target == document.getElementById('uploadModal')) {
+        closeUploadModal();
+      }
+    }
+
+    document.getElementById('uploadForm').onsubmit = function(e) {
+      e.preventDefault();
+      const documentType = document.getElementById('documentType').value;
+      const studentName = document.getElementById('studentName').value;
+      const file = document.getElementById('documentFile').files[0];
+
+      if (documentType && studentName && file) {
+        alert(`Documento ${documentType} para ${studentName} enviado com sucesso!`);
+        closeUploadModal();
+        // Implementar lógica de upload e processamento do documento
+      } else {
+        alert('Por favor, preencha todos os campos.');
+      }
+    }
+
+    function logout() {
+      if (confirm('Tem certeza que deseja sair?')) {
+        alert('Logout realizado com sucesso!');
+        window.location.href = 'index.html'; // Redireciona para a página de login
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    window.onload = loadDashboardData;
+  </script>
+</body>
+</html>

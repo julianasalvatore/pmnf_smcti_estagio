@@ -1,0 +1,98 @@
+<html><head><!--base href="https://example.com/estagio-sistema/cadastro.html/index.html/admin/suporte/logout.html"-->
+<title>Sistema de Recebimento de Estagiários - Logout</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .logout-container {
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+  }
+  h1 {
+    color: #35424a;
+    margin-bottom: 20px;
+  }
+  p {
+    margin-bottom: 20px;
+  }
+  .btn {
+    display: inline-block;
+    background: #0e658d;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .btn:hover {
+    background: #333;
+  }
+  #countdown {
+    font-weight: bold;
+    color: #e84c1d;
+  }
+</style>
+</head>
+<body>
+  <div class="logout-container">
+    <h1>Logout do Sistema</h1>
+    <p>Você foi desconectado com sucesso.</p>
+    <p>Redirecionando para a página de Inicio em <span id="countdown">5</span> segundos.</p>
+    <a href="../index.html" class="btn">Ir para a página inicial</a>
+  </div>
+
+  <script>
+    // Função para realizar o logout
+    function logout() {
+      // Limpar dados de autenticação do localStorage
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userName');
+      
+      // Você pode adicionar mais itens para remover, dependendo do que você armazena para a sessão do usuário
+    }
+
+    // Executar o logout imediatamente
+    logout();
+
+    // Configurar o redirecionamento com contagem regressiva
+    let timeLeft = 5;
+    const countdownElement = document.getElementById('countdown');
+    
+    const countdownTimer = setInterval(() => {
+      timeLeft--;
+      countdownElement.textContent = timeLeft;
+      
+      if (timeLeft <= 0) {
+        clearInterval(countdownTimer);
+        window.location.href = '../login.html';
+      }
+    }, 1000);
+
+    // Permitir que o usuário clique no botão para ir imediatamente para a página de login
+    document.querySelector('.btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      clearInterval(countdownTimer);
+      window.location.href = '../login.html';
+    });
+  </script>
+</body>
+</html>

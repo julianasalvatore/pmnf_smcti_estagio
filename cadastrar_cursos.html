@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Cursos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h2><span class="highlight"></span>Painel da Coordenação de Estágio</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <!--li class="current"><a href="#">Cadastro de Instituições de Ensino</a></li-->
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
+                        <div class="dropdown-content">
+                            <a href="#">Cadastrar Aluno</a>
+                            <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
+                            <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
+                            <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
+                            <a href="cadastra_equipe.html">Gerenciamento de Administradores</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Relatórios</a>
+                        <div class="dropdown-content">
+                            <a href="visao_geral.html">Visão Geral</a>
+                            <!--a href="#">Relatório 2</a-->
+                            <a href="grafico.html">Gráficos</a>
+                        </div>
+                    </li>
+                    <li><button id="logoutBtn">Sair</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Formulário para Cadastro de Cursos -->
+        <div class="panel">
+            <h2>Cadastrar curso</h2>
+            <form id="cursoForm" action="processar_curso.php" method="post">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken); ?>">
+                <div class="form-group">
+                    <label for="cursoNome">Nome do Curso:</label>
+                    <input type="text" id="cursoNome" name="cursoNome" required>
+                </div>
+                <button type="submit" class="btn">Cadastrar Curso</button>
+            </form>
+
+            <!-- Adicionando a seção de busca -->
+            <div class="search-container">
+                <input type="text" id="searchBox" placeholder="Buscar curso por nome">
+                <button id="searchBtn">Buscar</button>
+                <button id="deleteSelectedBtn">Excluir Selecionados</button>
+            </div>
+
+            <!-- Tabela de cursos -->
+            <table id="cursosTabela">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>Nome do Curso</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="cursosLista">
+                    <!-- Cursos serão inseridos aqui pelo JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Armazenamento local para cursos
+        let cursos = JSON.parse(localStorage.getItem('cursos')) || [];
+
+        // Função para ordenar cursos em ordem alfabética
+        function ordenarCursos(cursos) {
+            return cursos.sort((a, b) => a.nome.localeCompare(b.nome));
+        }
+
+        // Função para atualizar a lista de cursos
+        function atualizarListaCursos(filtro = '') {
+            const lista = document.getElementById('cursosLista');
+            lista.innerHTML = '';
+            const cursosOrdenados = ordenarCursos(cursos).filter(curso => curso.nome.toLowerCase().includes(filtro.toLowerCase()));
+            cursosOrdenados.forEach(curso => {
+                lista.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" class="cursoCheckbox" data-id="${curso.id}"></td>
+                        <td>${curso.nome}</td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="editarCurso(${curso.id})">Editar</button>
+                            <button class="action-btn delete-btn" onclick="deletarCurso(${curso.id})">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Função para adicionar ou atualizar curso
+        document.getElementById('cursoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('cursoNome').value;
+            const id = document.getElementById('cursoId') ? parseInt(document.getElementById('cursoId').value) : Date.now();
+            
+            // Verificar se o nome já existe
+            const cursoExistente = cursos.find(c => c.nome.toLowerCase() === nome.toLowerCase() && c.id !== id);
+            if (cursoExistente) {
+                alert('Um curso com esse nome já existe.');
+                return;
+            }
+
+            const cursoIndex = cursos.findIndex(c => c.id === id);
+            
+            if (cursoIndex > -1) {
+                // Atualizar curso existente
+                cursos[cursoIndex] = { id, nome };
+            } else {
+                // Adicionar novo curso
+                const novoCurso = { id, nome };
+                cursos.push(novoCurso);
+            }
+            
+            localStorage.setItem('cursos', JSON.stringify(cursos));
+            alert('Curso salvo com sucesso!');
+            this.reset();
+            atualizarListaCursos();
+        });
+
+        // Função para editar curso
+        function editarCurso(id) {
+            const curso = cursos.find(c => c.id === id);
+            document.getElementById('cursoNome').value = curso.nome;
+
+            let inputId = document.getElementById('cursoId');
+            if (!inputId) {
+                inputId = document.createElement('input');
+                inputId.type = 'hidden';
+                inputId.id = 'cursoId';
+                document.getElementById('cursoForm').appendChild(inputId);
+            }
+            inputId.value = curso.id;
+        }
+
+        // Função para deletar curso
+        function deletarCurso(id) {
+            cursos = cursos.filter(c => c.id !== id);
+            localStorage.setItem('cursos', JSON.stringify(cursos));
+            atualizarListaCursos();
+        }
+
+        // Função para deletar cursos selecionados
+        document.getElementById('deleteSelectedBtn').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.cursoCheckbox:checked');
+            const idsParaDeletar = Array.from(checkboxes).map(checkbox => parseInt(checkbox.getAttribute('data-id')));
+            cursos = cursos.filter(c => !idsParaDeletar.includes(c.id));
+            localStorage.setItem('cursos', JSON.stringify(cursos));
+            atualizarListaCursos();
+        });
+
+        // Selecionar/deselecionar todos os checkboxes
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checked = this.checked;
+            document.querySelectorAll('.cursoCheckbox').forEach(checkbox => checkbox.checked = checked);
+        });
+
+        // Função para buscar cursos
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const filtro = document.getElementById('searchBox').value;
+            atualizarListaCursos(filtro);
+        });
+
+        // Atualizar a lista ao carregar a página
+        atualizarListaCursos();
+    </script>
+
+</body>
+</html>

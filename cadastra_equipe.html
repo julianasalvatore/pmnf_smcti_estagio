@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Recebimento de Estagiários - Gerenciamento de Administradores</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div id="branding">
+            <h2><span class="highlight"></span>Painel da Coordenação de Estágio</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <!--li class="current"><a href="#">Cadastro de Instituições de Ensino</a></li-->
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
+                    <div class="dropdown-content">
+                        <a href="#">Cadastrar Aluno</a>
+                        <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
+                        <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
+                        <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
+                        <a href="cadastra_equipe.html">Gerenciamento de Administradores</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropbtn">Relatórios</a>
+                    <div class="dropdown-content">
+                        <a href="visao_geral.html">Visão Geral</a>
+                        <!--a href="#">Relatório 2</a-->
+                        <a href="grafico.html">Gráficos</a>
+                    </div>
+                </li>
+                <li><button id="logoutBtn" class="btn">Sair</button></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="panel">
+        <h2>Cadastrar Novo Administrador</h2>
+        <form id="adminForm">
+            <div class="form-group">
+                <label for="adminNome">Nome:</label>
+                <input type="text" id="adminNome" name="adminNome" required>
+            </div>
+            <div class="form-group">
+                <label for="adminEmail">Email:</label>
+                <input type="email" id="adminEmail" name="adminEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="adminSenha">Senha:</label>
+                <input type="password" id="adminSenha" name="adminSenha" required>
+            </div>
+            <div class="form-group">
+                <label for="adminSetor">Setor:</label>
+                <select id="adminSetor" name="adminSetor" required>
+                    <option value="">Selecione um setor</option>
+                    <option value="coord_estagio">Coordenação de Estágio - PMNF/ SMCTI</option>
+                    <option value="RH">Recursos Humanos</option>
+                    <option value="TI">Tecnologia da Informação</option>
+                    <option value="Financeiro">Financeiro</option>
+                    <option value="Administrativo">Administrativo</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Cadastrar Administrador</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Lista de Administradores</h2>
+        <div class="search-box">
+            <input type="text" id="searchBox" placeholder="Buscar por nome...">
+        </div>
+        <div class="checkbox-group">
+            <button class="btn delete-btn" onclick="excluirSelecionados()">Excluir Selecionados</button>
+        </div>
+        <div id="adminList"></div>
+    </div>
+</div>
+
+<script>
+    // Simulação de autenticação
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+            // window.location.href = '../login.html';
+        }
+    }
+
+    // Chamada da função de verificação de autenticação
+    checkAuth();
+
+    // Armazenamento local para administradores
+    let administradores = JSON.parse(localStorage.getItem('administradores')) || [];
+
+    // Função para manipulação do formulário
+    document.getElementById('adminForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nome = document.getElementById('adminNome').value;
+        const email = document.getElementById('adminEmail').value;
+        const senha = document.getElementById('adminSenha').value;
+        const setor = document.getElementById('adminSetor').value;
+
+        // Verificar se o email já está cadastrado
+        if (administradores.some(admin => admin.email === email)) {
+            alert('Este e-mail já está cadastrado.');
+            return;
+        }
+
+        const novoAdmin = { id: Date.now(), nome, email, senha, setor };
+        administradores.push(novoAdmin);
+        localStorage.setItem('administradores', JSON.stringify(administradores));
+
+        alert('Administrador cadastrado com sucesso!');
+        this.reset();
+        atualizarListaAdmins();
+    });
+
+    function atualizarListaAdmins() {
+        // Ordenar administradores por nome
+        administradores.sort((a, b) => a.nome.localeCompare(b.nome));
+
+        let tabela = '<table><tr><th><input type="checkbox" id="selectAll" onclick="selecionarTodos()"></th><th>Nome</th><th>Email</th><th>Setor</th><th>Ações</th></tr>';
+        administradores.forEach(admin => {
+            tabela += `<tr>
+                <td><input type="checkbox" class="select-item" data-id="${admin.id}"></td>
+                <td>${admin.nome}</td>
+                <td>${admin.email}</td>
+                <td>${admin.setor}</td>
+                <td>
+                    <button class="action-btn edit-btn" onclick="editarAdmin(${admin.id})">Editar</button>
+                    <button class="action-btn delete-btn" onclick="excluirAdmin(${admin.id})">Excluir</button>
+                </td>
+            </tr>`;
+        });
+        tabela += '</table>';
+        document.getElementById('adminList').innerHTML = tabela;
+    }
+
+    function editarAdmin(id) {
+        const admin = administradores.find(a => a.id === id);
+        if (admin) {
+            document.getElementById('adminNome').value = admin.nome;
+            document.getElementById('adminEmail').value = admin.email;
+            document.getElementById('adminSenha').value = admin.senha;
+            document.getElementById('adminSetor').value = admin.setor;
+
+            // Alterar o formulário para modo de edição
+            const form = document.getElementById('adminForm');
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                admin.nome = document.getElementById('adminNome').value;
+                admin.email = document.getElementById('adminEmail').value;
+                admin.senha = document.getElementById('adminSenha').value;
+                admin.setor = document.getElementById('adminSetor').value;
+
+                localStorage.setItem('administradores', JSON.stringify(administradores));
+                alert('Administrador atualizado com sucesso!');
+                this.reset();
+                atualizarListaAdmins();
+
+                // Restaurar o formulário para modo de cadastro
+                form.onsubmit = null;
+            };
+        }
+    }
+
+    function excluirAdmin(id) {
+        if (confirm('Tem certeza que deseja excluir este administrador?')) {
+            administradores = administradores.filter(a => a.id !== id);
+            localStorage.setItem('administradores', JSON.stringify(administradores));
+            atualizarListaAdmins();
+        }
+    }
+
+    function excluirSelecionados() {
+        const selecionados = document.querySelectorAll('.select-item:checked');
+        if (selecionados.length === 0) {
+            alert('Nenhum administrador selecionado.');
+            return;
+        }
+        if (confirm('Tem certeza que deseja excluir os administradores selecionados?')) {
+            const idsParaExcluir = Array.from(selecionados).map(checkbox => checkbox.dataset.id);
+            administradores = administradores.filter(a => !idsParaExcluir.includes(a.id.toString()));
+            localStorage.setItem('administradores', JSON.stringify(administradores));
+            atualizarListaAdmins();
+        }
+    }
+
+    function selecionarTodos() {
+        const selectAll = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.select-item');
+        checkboxes.forEach(checkbox => checkbox.checked = selectAll.checked);
+    }
+
+    // Função de busca
+    document.getElementById('searchBox').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const filteredAdmins = administradores.filter(admin =>
+            admin.nome.toLowerCase().includes(query)
+        );
+        mostrarListaFiltrada(filteredAdmins);
+    });
+
+    function mostrarListaFiltrada(admins) {
+        if (admins.length === 0) {
+            document.getElementById('adminList').innerHTML = '<p>Nenhum administrador encontrado.</p>';
+            return;
+        }
+
+        let tabela = '<table><tr><th><input type="checkbox" id="selectAll" onclick="selecionarTodos()"></th><th>Nome</th><th>Email</th><th>Setor</th><th>Ações</th></tr>';
+        admins.forEach(admin => {
+            tabela += `<tr>
+                <td><input type="checkbox" class="select-item" data-id="${admin.id}"></td>
+                <td>${admin.nome}</td>
+                <td>${admin.email}</td>
+                <td>${admin.setor}</td>
+                <td>
+                    <button class="action-btn edit-btn" onclick="editarAdmin(${admin.id})">Editar</button>
+                    <button class="action-btn delete-btn" onclick="excluirAdmin(${admin.id})">Excluir</button>
+                </td>
+            </tr>`;
+        });
+        tabela += '</table>';
+        document.getElementById('adminList').innerHTML = tabela;
+    }
+
+    // Inicializar lista
+    atualizarListaAdmins();
+
+    // Simulação de login automático para teste (mantenha isso apenas para desenvolvimento)
+    window.addEventListener('load', function() {
+        localStorage.setItem('isLoggedIn', 'true');
+    });
+</script>
+</body>
+</html>

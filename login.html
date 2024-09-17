@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Recebimento de Estagiários - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: #fff;
+            border-radius: 5px;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            color: #35424a;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background: #175c9c;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #333;
+        }
+        .register-link {
+            margin-top: 15px;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        img {
+            display: block;
+            margin: 0 auto 20px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <a href="index.html"><img src="https://smcti.novafriburgo.rj.gov.br/view/img/PDEE2.webp" alt="logo pdee" /></a>
+        <h1>Login</h1>
+        <form id="loginForm">
+            <label for="username">Usuário (e-mail):</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Entrar</button>
+        </form>
+        <p class="register-link">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+        <p class="register-link">Esqueceu sua senha? <a href="#">Clique aqui</a></p>
+        <p id="errorMessage" class="error-message"></p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Faça uma chamada para o backend para autenticar o usuário
+            fetch('login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'email': username,
+                    'senha': password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userRole', data.role); // Ex: 'admin' ou 'student'
+                    localStorage.setItem('userName', data.name); // Nome do usuário, se disponível
+                    window.location.href = data.redirectUrl; // URL de redirecionamento após o login
+                } else {
+                    document.getElementById('errorMessage').textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                document.getElementById('errorMessage').textContent = 'Erro ao fazer login. Tente novamente.';
+            });
+        });
+    </script>
+</body>
+</html>

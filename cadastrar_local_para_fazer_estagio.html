@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Painel de Suporte</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .action-btn {
+            margin-left: 10px;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .delete-btn, .edit-btn, .delete-selected-btn, .select-all-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .delete-selected-btn {
+            background-color: #ff5722;
+        }
+        .select-all-btn {
+            background-color: #4CAF50;
+        }
+        .delete-btn:hover, .edit-btn:hover, .delete-selected-btn:hover, .select-all-btn:hover {
+            background-color: #d32f2f;
+        }
+        .checkbox {
+            margin-right: 10px;
+        }
+        .edit-btn {
+            background-color: #2196F3; /* Cor azul para o botão de editar */
+        }
+        .edit-btn:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h2><span class="highlight"></span>Painel da Coordenação de Estágio</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
+                        <div class="dropdown-content">
+                            <a href="#">Cadastrar Aluno</a>
+                            <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
+                            <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
+                            <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
+                            <a href="cadastra_equipe.html">Gerenciamento de Administradores</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn">Relatórios</a>
+                        <div class="dropdown-content">
+                            <a href="visao_geral.html">Visão Geral</a>
+                            <a href="grafico.html">Gráficos</a>
+                        </div>
+                    </li>
+                    <li><button id="logoutBtn">Sair</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <h2>Cadastrar Local de Estágio</h2>
+            <form id="localEstagioForm">
+                <input type="hidden" id="editId" name="editId" value="">
+                <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+                <div class="form-group">
+                    <label for="localNome">Nome do Local:</label>
+                    <input type="text" id="localNome" name="localNome" required>
+                </div>
+                <button type="submit" class="btn" id="submitBtn">Cadastrar Local de Estágio</button>
+                <button type="button" class="btn" id="saveBtn" style="display: none;">Salvar Edição</button>
+                <button type="button" class="btn" id="cancelBtn" style="display: none;">Cancelar Edição</button>
+            </form>
+            <button class="select-all-btn" id="selectAllBtn">Selecionar Todos</button>
+            <button class="delete-selected-btn" id="deleteSelectedBtn">Excluir Selecionados</button>
+            <div id="locaisEstagioLista"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let locaisEstagio = [];
+
+            // Função para carregar locais do arquivo JSON
+            async function carregarLocaisEstagio() {
+                try {
+                    const response = await fetch('locais_estagio.json');
+                    locaisEstagio = await response.json();
+                    atualizarListaLocaisEstagio();
+                } catch (error) {
+                    console.error('Erro ao carregar os locais:', error);
+                }
+            }
+
+            function atualizarListaLocaisEstagio() {
+                locaisEstagio.sort((a, b) => a.nome.localeCompare(b.nome));
+
+                const lista = document.getElementById('locaisEstagioLista');
+                lista.innerHTML = '<h3>Locais de Estágio Cadastrados</h3>';
+
+                if (locaisEstagio.length === 0) {
+                    lista.innerHTML += '<p>Nenhum local cadastrado.</p>';
+                } else {
+                    locaisEstagio.forEach(local => {
+                        lista.innerHTML += `
+                            <p>
+                                <input type="checkbox" class="checkbox" id="checkbox-${local.id}">
+                                Nome: ${local.nome}
+                                <button class="action-btn edit-btn" onclick="editarLocal(${local.id})">Editar</button>
+                                <button class="action-btn delete-btn" onclick="deletarLocal(${local.id})">Excluir</button>
+                            </p>
+                        `;
+                    });
+                }
+            }
+
+            document.getElementById('localEstagioForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('editId').value;
+                const nome = document.getElementById('localNome').value.trim();
+
+                const localExistente = locaisEstagio.find(l => l.nome.toLowerCase() === nome.toLowerCase() && l.id !== parseInt(id));
+
+                if (localExistente) {
+                    alert('Este local já está cadastrado!');
+                    return;
+                }
+
+                if (id) {
+                    const index = locaisEstagio.findIndex(l => l.id === parseInt(id));
+                    if (index !== -1) {
+                        locaisEstagio[index].nome = nome;
+                        alert('Local de estágio atualizado com sucesso!');
+                    }
+                    document.getElementById('editId').value = '';
+                    document.getElementById('submitBtn').style.display = 'inline';
+                    document.getElementById('saveBtn').style.display = 'none';
+                    document.getElementById('cancelBtn').style.display = 'none';
+                } else {
+                    const novoLocal = { id: Date.now(), nome };
+                    locaisEstagio.push(novoLocal);
+                    alert('Local de estágio cadastrado com sucesso!');
+                }
+                this.reset();
+                atualizarListaLocaisEstagio();
+            });
+
+            window.editarLocal = (id) => {
+                const local = locaisEstagio.find(l => l.id === id);
+                if (local) {
+                    document.getElementById('localNome').value = local.nome;
+                    document.getElementById('editId').value = local.id;
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('saveBtn').style.display = 'inline';
+                    document.getElementById('cancelBtn').style.display = 'inline';
+                }
+            };
+
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                document.getElementById('editId').value = '';
+                document.getElementById('localEstagioForm').reset();
+                document.getElementById('submitBtn').style.display = 'inline';
+                document.getElementById('saveBtn').style.display = 'none';
+                document.getElementById('cancelBtn').style.display = 'none';
+            });
+
+            window.deletarLocal = (id) => {
+                const confirmacao = confirm('Tem certeza de que deseja excluir este local?');
+                if (confirmacao) {
+                    locaisEstagio = locaisEstagio.filter(l => l.id !== id);
+                    atualizarListaLocaisEstagio();
+                }
+            };
+
+            document.getElementById('deleteSelectedBtn').addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('.checkbox:checked');
+                if (checkboxes.length === 0) {
+                    alert('Nenhum local selecionado.');
+                    return;
+                }
+
+                const confirmacao = confirm('Tem certeza de que deseja excluir os locais selecionados?');
+                if (confirmacao) {
+                    const idsParaExcluir = Array.from(checkboxes).map(checkbox => parseInt(checkbox.id.replace('checkbox-', '')));
+                    locaisEstagio = locaisEstagio.filter(local => !idsParaExcluir.includes(local.id));
+                    atualizarListaLocaisEstagio();
+                }
+            });
+
+            document.getElementById('selectAllBtn').addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('.checkbox');
+                checkboxes.forEach(checkbox => checkbox.checked = true);
+            });
+
+            carregarLocaisEstagio();
+        });
+    </script>
+</body>
+</html>

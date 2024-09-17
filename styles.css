@@ -1,0 +1,210 @@
+/* CSS Atualizado */
+
+/* Reset básico e estilo geral */
+body {
+ font-family: Arial, sans-serif;
+ line-height: 1.6;
+ margin: 0;
+ padding: 0;
+ background-color: #f4f4f4;
+ color: #333;
+}
+
+.container {
+ width: 90%;
+ margin: auto;
+ overflow: hidden;
+ padding: 20px;
+}
+
+/* Estilo do header */
+header {
+ background: #35424a;
+ color: #ffffff;
+ padding-top: 10px;
+ min-height: 70px;
+ border-bottom: #1da8e8 3px solid;
+}
+
+header a {
+ color: #ffffff;
+ text-decoration: none;
+ font-size: 14px;
+}
+
+header ul {
+ padding: 0;
+ list-style: none;
+ margin: 0;
+}
+
+header li {
+ display: inline;
+ padding: 0 15px 0 10px;
+}
+
+header #branding {
+ float: left;
+}
+
+/* Alterado de h1 para h2 no header */
+header #branding h2 {
+ margin: 0;
+}
+
+/* header #branding h1 { margin: 0; } */
+/* Alterado para h2 */
+header nav {
+ float: right;
+ margin-top: 10px;
+}
+
+.highlight, header .current a {
+ color: #3498db;
+ font-weight: bold;
+}
+
+/* Estilo dos painéis */
+.panel {
+ background: #fff;
+ border-radius: 5px;
+ padding: 20px;
+ margin-bottom: 20px;
+ box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.panel h2 {
+ color: #4a3535;
+ border-bottom: 1px solid #e8e8e8;
+ padding-bottom: 10px;
+}
+
+/* Estilo dos formulários */
+.form-group {
+ margin-bottom: 15px;
+}
+
+.form-group label {
+ display: block;
+ margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group select {
+ width: 100%;
+ padding: 8px;
+ border: 1px solid #ddd;
+ border-radius: 4px;
+}
+
+/* Estilo dos botões */
+.btn {
+ display: inline-block;
+ background: #308be0;
+ color: #ffffff;
+ padding: 10px 20px;
+ text-decoration: none;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+}
+
+/* Alterado para um tom mais escuro de cinza */
+.btn:hover {
+ background: #1a1a1a;
+}
+
+/* CSS Original */
+/* .btn:hover { background: #333; } */
+
+table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-top: 20px;
+}
+
+table, th, td {
+ border: 1px solid #ddd;
+ padding: 10px;
+ text-align: left;
+}
+
+th {
+ background-color: #35424a;
+ color: white;
+}
+
+/* Estilo dos botões de ação */
+.action-btn {
+ padding: 5px 10px;
+ margin-right: 5px;
+ cursor: pointer;
+ border: none;
+ border-radius: 3px;
+}
+
+.edit-btn {
+ background-color: #ffa500;
+ color: white;
+}
+
+.delete-btn {
+ background-color: #ff4136;
+ color: white;
+}
+
+/* Estilo do botão de logout */
+#logoutBtn {
+ background-color: #36aef4;
+ color: white;
+ border: none;
+ padding: 10px 15px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 16px;
+ margin: 4px 2px;
+ cursor: pointer;
+ border-radius: 5px;
+}
+
+/* Estilo para o dropdown */
+.dropdown {
+ position: relative;
+ display: inline-block;
+}
+
+/* Alterado de fixed para absolute */
+.dropdown-content {
+ display: none;
+ position: absolute; /* Corrigido para ser relativo ao dropdown */
+ background-color: #f9f9f9;
+ min-width: 160px;
+ box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+ z-index: 10;
+}
+
+.dropdown-content a {
+ color: black;
+ padding: 12px 16px;
+ text-decoration: none;
+ display: block;
+}
+
+.dropdown-content a:hover {
+ background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+ display: block;
+}
+
+.dropdown:hover .dropbtn {
+ background-color: #1da8e8;
+}
+
+/* CSS Original */
+ .dropdown-content { display: none; position: fixed; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); z-index: 10; } */
+/* Alterado para absolute */

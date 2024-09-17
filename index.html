@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Recebimento de Estagiários - Página Inicial</title>
+  <style>
+    :root {
+      --primary-color: #354047;
+      --secondary-color: #164869;
+      --accent-color: #e74c3c;
+      --text-color: #333;
+      --background-color: #ecf0f1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--background-color);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-left: 20px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary-color);
+    }
+
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.815), rgba(0, 0, 0, 0.897)), url('https://smcti.novafriburgo.rj.gov.br/view/img/PDEE2.webp') no-repeat center center/cover;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--secondary-color);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #67ace1;
+    }
+
+    .features {
+      padding: 4rem 0;
+      background: white;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--background-color);
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <!--div class="logo">PDEE - Programa de Desenvolvimento de Estágio de Estudantes</div-->
+      <img src="https://smcti.novafriburgo.rj.gov.br/view/img/logo_smct_nav2.png" alt="" class="img-fluid">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cadastro_candidato.html">Cadastro</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="painel_suporte.html">COORDENAÇÃO DE ESTAGIO</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Comece sua jornada profissional aqui</h1>
+        <p>Conectamos estudantes talentosos a oportunidades de estágio incríveis</p>
+        <a href="cadastro_candidato.html" class="btn">Cadastre-se Agora</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Como funciona</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>Cadastre-se</h3>
+            <p>Crie sua conta e preencha seu perfil com suas informações acadêmicas e profissionais.</p>
+          </div>
+          <!--div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Busque Vagas</h3>
+            <p>Explore oportunidades de estágio alinhadas com seu curso e interesses.</p>
+          </div-->
+          <div class="feature-card">
+            <div class="feature-icon">📤</div>
+            <h3>Candidate-se</h3>
+            <p>Envie sua lista de <b>*</b>sugestão de ao menos 3 locais que deseja estágiar e acompanhe o status.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Inicie seu Estágio</h3>
+            <p>Seja selecionado e comece sua jornada profissional com o pé direito!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 SisEstágio. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animação de entrada para os cards de features
+      const featureCards = document.querySelectorAll('.feature-card');
+      featureCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 200 * index);
+      });
+
+      // Verifica se o usuário está logado (simulação)
+     // const isLoggedIn = localStorage.getItem('isLoggedIn');
+      //if (isLoggedIn) {
+       // const navLinks = document.querySelector('.nav-links');
+       // const loginLink = navLinks.querySelector('li:nth-child(4)');
+       // loginLink.innerHTML = '<a href="perfil.html">Meu Perfil</a>';
+        
+      //  const cadastroLink = navLinks.querySelector('li:nth-child(2)');
+      //  cadastroLink.innerHTML = '<a href="solicitacao.html">Nova Solicitação</a>';
+     // }
+
+      // Adiciona efeito de parallax ao hero
+      const hero = document.querySelector('.hero');
+      window.addEventListener('scroll', () => {
+        const scrollPosition = window.pageYOffset;
+        hero.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+      });
+    });
+  </script>
+</body>
+</html>

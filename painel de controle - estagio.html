@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Coordenação de Estágio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    nav ul li {
+      margin: 5px 10px;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+    h1, h2 {
+      color: #333;
+      text-align: center;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .dashboard-item {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .dashboard-item h3 {
+      color: #e8491d;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #e8491d;
+      color: #fff;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #333;
+    }
+    #logoutBtn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    #content {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #e8491d;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: center;
+      }
+      nav ul {
+        flex-direction: column;
+      }
+      .dashboard-item {
+        padding: 10px;
+      }
+      .btn {
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Coordenação de Estágio - Dashboard</h1>
+    <nav>
+      <ul>
+        <li><a href="#estagiarios" onclick="loadContent('estagiarios')">Estagiários</a></li>
+        <li><a href="#documentos" onclick="loadContent('documentos')">Documentos</a></li>
+        <li><a href="#fila-espera" onclick="loadContent('filaEspera')">Fila de Espera</a></li>
+        <li><a href="#relatorios" onclick="loadContent('relatorios')">Relatórios</a></li>
+        <li><a href="#inscritos" onclick="loadContent('inscritos')">Lista de Inscritos</a></li>
+        <li><button id="logoutBtn">Sair</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Bem-vindo ao Painel de Controle</h2>
+    
+    <div class="dashboard-grid">
+      <div class="dashboard-item">
+        <h3>Estagiários Ativos</h3>
+        <p>Total: <span id="activeInterns">0</span></p>
+        <a href="#estagiarios" class="btn" onclick="loadContent('estagiarios')">Ver Detalhes</a>
+      </div>
+      <div class="dashboard-item">
+        <h3>Documentos Pendentes</h3>
+        <p>Total: <span id="pendingDocuments">0</span></p>
+        <a href="#documentos" class="btn" onclick="loadContent('documentos')">Gerenciar Documentos</a>
+      </div>
+      <div class="dashboard-item">
+        <h3>Alunos na Fila de Espera</h3>
+        <p>Total: <span id="waitingStudents">0</span></p>
+        <a href="#fila-espera" class="btn" onclick="loadContent('filaEspera')">Ver Fila</a>
+      </div>
+      <div class="dashboard-item">
+        <h3>Estágios Concluídos</h3>
+        <p>Total: <span id="completedInternships">0</span></p>
+        <a href="#relatorios" class="btn" onclick="loadContent('relatorios')">Ver Relatório</a>
+      </div>
+    </div>
+
+    <div id="content"></div>
+  </div>
+
+  <script>
+    function checkLogin() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      const userRole = localStorage.getItem('userRole');
+      
+      if (!isLoggedIn || userRole !== 'coordenacao') {
+        window.location.href = 'painel de controle - estagio.html';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userRole');
+      window.location.href = 'painel de controle - estagio.html';
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    function loadDashboardData() {
+      document.getElementById('activeInterns').textContent = Math.floor(Math.random() * 100);
+      document.getElementById('pendingDocuments').textContent = Math.floor(Math.random() * 50);
+      document.getElementById('waitingStudents').textContent = Math.floor(Math.random() * 30);
+      document.getElementById('completedInternships').textContent = Math.floor(Math.random() * 200);
+    }
+
+    function loadContent(section) {
+      const contentDiv = document.getElementById('content');
+      switch (section) {
+        case 'estagiarios':
+          contentDiv.innerHTML = '<h2>Lista de Estagiários</h2>';
+          break;
+        case 'documentos':
+          contentDiv.innerHTML = '<h2>Gerenciar Documentos</h2>';
+          break;
+        case 'filaEspera':
+          contentDiv.innerHTML = '<h2>Fila de Espera</h2>';
+          break;
+        case 'relatorios':
+          contentDiv.innerHTML = '<h2>Relatórios</h2>';
+          break;
+        case 'inscritos':
+          contentDiv.innerHTML = '<h2>Lista de Inscritos</h2>';
+          break;
+        default:
+          contentDiv.innerHTML = '<h2>Selecione uma opção no menu</h2>';
+      }
+    }
+
+    window.onload = function() {
+      checkLogin();
+      loadDashboardData();
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        loadContent(hash);
+      }
+    };
+
+    window.addEventListener('hashchange', function() {
+      const hash = window.location.hash.substring(1);
+      loadContent(hash);
+    });
+  </script>
+</body>
+</html>
