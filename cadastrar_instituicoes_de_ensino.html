@@ -103,8 +103,8 @@ $csrfToken = $_SESSION['csrf_token'];
             instituicoes.sort((a, b) => a.nome.localeCompare(b.nome));
 
             instituicoes.forEach(instituicao => {
-                const dataInicioFormatada = new Date(instituicao.dataInicio).toLocaleDateString('pt-BR');
-                const dataFimFormatada = new Date(instituicao.dataFim).toLocaleDateString('pt-BR');
+                const dataInicioFormatada = formatarData(instituicao.dataInicio);
+                const dataFimFormatada = formatarData(instituicao.dataFim);
 
                 const dataAtual = new Date();
                 const dataFim = new Date(instituicao.dataFim);
@@ -119,6 +119,11 @@ $csrfToken = $_SESSION['csrf_token'];
                 `;
                 lista.innerHTML += instituicaoHtml;
             });
+        }
+
+        function formatarData(data) {
+            const partes = data.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`; // dd/mm/aaaa
         }
 
         function editarInstituicao(id) {
