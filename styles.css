@@ -1,5 +1,3 @@
-/* CSS Atualizado */
-
 /* Reset básico e estilo geral */
 body {
  font-family: Arial, sans-serif;
@@ -52,14 +50,13 @@ header #branding h2 {
  margin: 0;
 }
 
-/* header #branding h1 { margin: 0; } */
-/* Alterado para h2 */
 header nav {
  float: right;
  margin-top: 10px;
 }
 
-.highlight, header .current a {
+.highlight,
+header .current a {
  color: #3498db;
  font-weight: bold;
 }
@@ -70,7 +67,7 @@ header nav {
  border-radius: 5px;
  padding: 20px;
  margin-bottom: 20px;
- box-shadow: 0 0 10px rgba(0,0,0,0.1);
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .panel h2 {
@@ -111,13 +108,9 @@ header nav {
  cursor: pointer;
 }
 
-/* Alterado para um tom mais escuro de cinza */
 .btn:hover {
  background: #1a1a1a;
 }
-
-/* CSS Original */
-/* .btn:hover { background: #333; } */
 
 table {
  width: 100%;
@@ -125,7 +118,9 @@ table {
  margin-top: 20px;
 }
 
-table, th, td {
+table,
+th,
+td {
  border: 1px solid #ddd;
  padding: 10px;
  text-align: left;
@@ -176,10 +171,19 @@ th {
  display: inline-block;
 }
 
-/* Alterado de fixed para absolute */
+/* CSS Original */
+/* .dropdown-content { 
+display: none; 
+position: fixed; 
+background-color: #f9f9f9; 
+min-width: 160px; 
+box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); 
+z-index: 10; } */
+/* Alterado para absolute */
+
 .dropdown-content {
  display: none;
- position: absolute; /* Corrigido para ser relativo ao dropdown */
+ position: fixed; /* Corrigido para ser relativo ao dropdown */
  background-color: #f9f9f9;
  min-width: 160px;
  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
@@ -205,6 +209,31 @@ th {
  background-color: #1da8e8;
 }
 
-/* CSS Original */
- .dropdown-content { display: none; position: fixed; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); z-index: 10; } */
-/* Alterado para absolute */
+/* CSS Atualizado do formulário */
+.expired {
+ border: 2px solid red;
+ padding: 10px;
+ margin-bottom: 10px;
+ background-color: #ffe6e6;
+}
+
+.expired::before {
+ content: "Expirado";
+ color: red;
+ font-weight: bold;
+ margin-right: 10px;
+}
+
+/* Estilo adicional mantido do arquivo HTML */
+.form-group, .btn {
+ margin-bottom: 15px; /* Mantido */
+}
+
+.action-btn {
+ margin-left: 10px; /* Mantido */
+}
+
+
+
+
+

@@ -13,91 +13,6 @@ $csrfToken = $_SESSION['csrf_token'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Sistema de Recebimento de Estagiários</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
-        }
-        header {
-            background: #35424a;
-            color: #ffffff;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #35b0e0 3px solid;
-        }
-        header a {
-            color: #ffffff;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 16px;
-        }
-        header ul {
-            padding: 0;
-            list-style: none;
-        }
-        header li {
-            display: inline;
-            padding: 0 20px;
-        }
-        header #branding {
-            float: left;
-        }
-        header #branding h3 {
-            margin: 0;
-        }
-        header nav {
-            float: right;
-            margin-top: 10px;
-        }
-        .highlight, header .current a {
-            color: #35b0e0;
-            font-weight: bold;
-        }
-        .form-container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="date"],
-        input[type="tel"],
-        select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            display: inline-block;
-            background: #125d6a;
-            color: #ffffff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #35424a;
-        }
-    </style>
 </head>
 <body>
 <header>
@@ -108,10 +23,10 @@ $csrfToken = $_SESSION['csrf_token'];
         <nav>
             <ul>
                 <li><a href="index.html">Início</a></li>
-                <li class="dropdown">
+                <!--li class="dropdown">
                     <a href="javascript:void(0)" class="dropbtn">Cadastrar</a>
                     <div class="dropdown-content">
-                        <a href="">Cadastrar Aluno</a>
+                        <a href="cadastro_candidato.html">Cadastrar Aluno</a>
                         <a href="cadastrar_cursos.html">Cadastrar Cursos</a>
                         <a href="cadastrar_instituicoes_de_ensino.html">Cadastrar Instituições de Ensino</a>
                         <a href="cadastrar_local_para_fazer_estagio.html">Cadastrar Locais para fazer estágio</a>
@@ -124,7 +39,7 @@ $csrfToken = $_SESSION['csrf_token'];
                         <a href="visao_geral.html">Visão Geral</a>
                         <a href="grafico.html">Gráficos</a>
                     </div>
-                </li>
+                </li-->
                 <li><button id="logoutBtn">Sair</button></li>
             </ul>
         </nav>
@@ -222,10 +137,14 @@ $csrfToken = $_SESSION['csrf_token'];
         const instituicaoSelect = document.getElementById('instituicao');
         instituicaoSelect.innerHTML = '<option value="" disabled selected>Selecione a instituição</option>';
         instituicoes.forEach(inst => {
-            const optionElement = document.createElement('option');
-            optionElement.textContent = inst.nome;
-            optionElement.value = inst.id;
-            instituicaoSelect.appendChild(optionElement);
+            const dataFim = new Date(inst.dataFim);
+            const dataAtual = new Date();
+            if (dataFim >= dataAtual) { // Verifica se a instituição está ativa
+                const optionElement = document.createElement('option');
+                optionElement.textContent = inst.nome;
+                optionElement.value = inst.id;
+                instituicaoSelect.appendChild(optionElement);
+            }
         });
 
         // Atualiza o select de cursos
