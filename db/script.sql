@@ -43,25 +43,25 @@ CREATE TABLE IF NOT EXISTS administrador(
     senha VARCHAR(256) -- !!IMPORTANTE!! SALVE A SENHA EM HASH!!! https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_hash  https://www.youtube.com/watch?v=b4b8ktEV4Bg 
 )ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Descomente caso queira que setor seja uma entidade
-CREATE TABLE IF NOT EXISTS setor(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(200)
-)ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- -- Descomente caso queira que setor seja uma entidade
+-- CREATE TABLE IF NOT EXISTS setor(
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     nome VARCHAR(200)
+-- )ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-DROP TABLE administrador;
+-- DROP TABLE administrador;
 
-CREATE TABLE administrador(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(65) NOT NULL,
-    email VARCHAR(65) NOT NULL,
-    id_setor INT NOT NULL,
-    senha VARCHAR(256), -- !!IMPORTANTE!! SALVE A SENHA EM HASH!!! https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_hash  https://www.youtube.com/watch?v=b4b8ktEV4Bg 
+-- CREATE TABLE administrador(
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     nome VARCHAR(65) NOT NULL,
+--     email VARCHAR(65) NOT NULL,
+--     id_setor INT NOT NULL,
+--     senha VARCHAR(256), -- !!IMPORTANTE!! SALVE A SENHA EM HASH!!! https://pt.wikipedia.org/wiki/Fun%C3%A7%C3%A3o_hash  https://www.youtube.com/watch?v=b4b8ktEV4Bg 
     
   
 
-    CONSTRAINT fk_id_setor FOREIGN KEY(id_setor) REFERENCES setor(id) ON DELETE RESTRICT ON UPDATE CASCADE
+--     CONSTRAINT fk_id_setor FOREIGN KEY(id_setor) REFERENCES setor(id) ON DELETE RESTRICT ON UPDATE CASCADE
 
-)ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- )ENGINE=INNODB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
