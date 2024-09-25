@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route('/<path:filename>')
 def serve_file(filename):
     # Serve arquivos do diretório especificado
- print(f'Recebendo solicitação para: {filename}')
+    print(f'Recebendo solicitação para: {filename}')  # Correção de indentação
     return send_from_directory('sistema_estagio_2024/pmnf_smcti_estagio', filename)
 
 if __name__ == '__main__':
